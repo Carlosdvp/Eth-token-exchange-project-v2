@@ -13,9 +13,16 @@ import FooterComponent from '../components/FooterComponent.vue'
 import Metamask from '../components/Metamask.vue'
 
 // import the web3 library
-import web3 from '../../helpers/web3';
+import { loadWeb3 } from '../../helpers/web3';
+
 // import Token Contract
 import Token from '../abis/Token.json'
+
+// Vuex
+import { useStore } from 'vuex'
+// we also need to use computed properties
+import { computed } from 'vue'
+
 
 // Module exports and methods
 export default {
@@ -25,11 +32,18 @@ export default {
     FooterComponent,
     Metamask
   },
+  setup() {
+    const store = useStore()
+
+  },
   mounted() {
     this.loadBlockchainData()
   },
   methods: {
     async loadBlockchainData() {
+      // confirm the web3 connection
+      const web3 = loadWeb3()
+      console.log(web3)
       // Check the network we are connected to
       const network = await web3.eth.net.getNetworkType()
       // get the accounts
@@ -45,6 +59,10 @@ export default {
       const totalSupply = await token.methods.totalSupply().call()
       console.log("Total Supply: ", totalSupply)
     }
+    // increment() {
+    //   this.$store.commit('increment')
+    //   console.log(this.$store.state.count)
+    // }
   }
 }
 </script>
