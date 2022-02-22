@@ -13,7 +13,7 @@ import FooterComponent from '../components/FooterComponent.vue'
 import Metamask from '../components/Metamask.vue'
 
 // import the web3 library
-import { loadWeb3 } from '../../helpers/web3';
+import { loadWeb3, loadAccount } from '../../helpers/web3';
 
 // import Token Contract
 import Token from '../abis/Token.json'
@@ -32,9 +32,11 @@ export default {
     FooterComponent,
     Metamask
   },
-  setup() {
-    const store = useStore()
-
+  beforeCreate() {
+    console.log('web3Loaded Action dispatched from Home.vue')
+    this.$store.dispatch('web3Loaded')
+    console.log('web3AccountLoaded Action dispatched from Home.vue')
+    this.$store.dispatch('web3AccountLoaded')
   },
   mounted() {
     this.loadBlockchainData()
@@ -42,12 +44,13 @@ export default {
   methods: {
     async loadBlockchainData() {
       // confirm the web3 connection
-      const web3 = loadWeb3()
-      console.log(web3)
-      // Check the network we are connected to
-      const network = await web3.eth.net.getNetworkType()
+      const web3 = await loadWeb3()
+      // console.log(web3)
+      // Check the network we are connected to -- this method appears to be deprecated (getNetworkType), docs recommend we use the one included below
+      const network = await web3.eth.getChainId()
       // get the accounts
-      const accounts = await web3.eth.getAccounts()
+      const accounts = await loadAccount()
+      console.log(accounts)
       // grab the network ID
       const networkId = await web3.eth.net.getId()
       // get the Token abi in here
@@ -57,12 +60,8 @@ export default {
       const token = new web3.eth.Contract(abi, tokenAddress)
       // get the total supply by calling one of our contract methods
       const totalSupply = await token.methods.totalSupply().call()
-      console.log("Total Supply: ", totalSupply)
+      // console.log("Total Supply: ", totalSupply)
     }
-    // increment() {
-    //   this.$store.commit('increment')
-    //   console.log(this.$store.state.count)
-    // }
   }
 }
 </script>
