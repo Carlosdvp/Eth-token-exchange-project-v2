@@ -2,7 +2,8 @@ import Web3 from 'web3';
 
 // import Token Contract
 import Token from '../src/abis/Token.json'
-
+// import Token Contract
+import Exchange from '../src/abis/Exchange.json'
 
 
 // export const loadWeb3 = () => {
@@ -38,7 +39,19 @@ export const loadToken = async (web3, networkId) => {
 	// get the Token abi in here
   const abi = Token.abi;
   const tokenAddress = Token.networks[networkId].address;
+  // instantiate a new Contract object for our token
   const token = new web3.eth.Contract(abi, tokenAddress)
 	
 	return token
+}
+
+// Get the Exchange contract
+export const loadExchange = async (web3, networkId) => {
+	// get the Token abi in here
+  const abi = Exchange.abi;
+  const exchangeAddress = Exchange.networks[networkId].address;
+  // instantiate a new Contract object for our token
+  const exchange = new web3.eth.Contract(abi, exchangeAddress)
+	
+	return exchange
 }

@@ -1,11 +1,12 @@
 import { createStore } from 'vuex'
 import Web3 from 'web3'
 
-// import our Web3 helper method
+// import our Web3 helper methods
 import { 
   loadWeb3,
   loadAccount,
-  loadToken
+  loadToken,
+  loadExchange
 } from '../../helpers/web3'
 
 
@@ -16,6 +17,9 @@ export default createStore({
       account: null
     },
     Token: {
+      contract: null
+    },
+    Exchange: {
       contract: null
     }
   },
@@ -36,6 +40,11 @@ export default createStore({
       console.log('TOKEN_LOADED Mutation being executed', contract)
       let result = contract
       state.Token.contract = result
+    },
+    EXCHANGE_LOADED(state, contract) {
+      console.log('EXCHANGE_LOADED Mutation being executed', contract)
+      let result = contract
+      state.Exchange.contract = result
     }
   },
   actions: {
@@ -54,15 +63,25 @@ export default createStore({
       // console.log('commit result to the WEB3_ACCOUNT_LOADED Mutation')
       commit('WEB3_ACCOUNT_LOADED', account)
     },
-    // load the Token
+    // TOKEN ACTIONS
     async tokenLoaded({ commit }) {
       console.log('tokenLoaded Action being executed')
       const web3 = await loadWeb3()
       const networkId = await web3.eth.net.getId()
 
       let contract = await loadToken(web3, networkId)
-      console.log('tokenLoaded Action being executed')
+      console.log('commit result to the TOKEN_LOADED Mutation')
       commit('TOKEN_LOADED', contract)
+    },
+    // EXCHANGE ACTIONS
+    async exchangeLoaded({ commit }) {
+      console.log('exchangeLoaded Action being executed')
+      const web3 = await loadWeb3()
+      const networkId = await web3.eth.net.getId()
+
+      let contract = await loadExchange(web3, networkId)
+      console.log('commit result to the EXCHANGE_LOADED Mutation')
+      commit('EXCHANGE_LOADED', contract)
     }
   },
   modules: { }
