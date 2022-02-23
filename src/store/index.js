@@ -4,7 +4,8 @@ import Web3 from 'web3'
 // import our Web3 helper method
 import { 
   loadWeb3,
-  loadAccount
+  loadAccount,
+  loadToken
 } from '../../helpers/web3'
 
 
@@ -12,7 +13,9 @@ export default createStore({
   state: {
     Web3: {
       web3: null,
-      account: null,
+      account: null
+    },
+    Token: {
       contract: null
     }
   },
@@ -32,7 +35,7 @@ export default createStore({
     TOKEN_LOADED(state, contract) {
       console.log('TOKEN_LOADED Mutation being executed', contract)
       let result = contract
-      state.Web3.contract = result
+      state.Token.contract = result
     }
   },
   actions: {
@@ -46,15 +49,20 @@ export default createStore({
     // load the account being used
     async web3AccountLoaded({ commit }) {
       // console.log('web3AccountLoaded action being executed')
-      // this line below is where the method is breaking
-      let account = await loadAccount()
+      const web3 = await loadWeb3()
+      let account = await loadAccount(web3)
       // console.log('commit result to the WEB3_ACCOUNT_LOADED Mutation')
       commit('WEB3_ACCOUNT_LOADED', account)
     },
     // load the Token
     async tokenLoaded({ commit }) {
       console.log('tokenLoaded Action being executed')
-      // let contract = await 
+      const web3 = await loadWeb3()
+      const networkId = await web3.eth.net.getId()
+
+      let contract = await loadToken(web3, networkId)
+      console.log('tokenLoaded Action being executed')
+      commit('TOKEN_LOADED', contract)
     }
   },
   modules: { }

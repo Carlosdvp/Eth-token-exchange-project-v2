@@ -1,8 +1,12 @@
 import Web3 from 'web3';
 
+// import Token Contract
+import Token from '../src/abis/Token.json'
+
+
+
 // export const loadWeb3 = () => {
 // 	const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
-
 // 	return web3;
 // }
 
@@ -20,8 +24,7 @@ export const loadWeb3 = async () => {
 }
 
 // Get the account info
-export const loadAccount = async () => {
-	const web3 = await loadWeb3()
+export const loadAccount = async (web3) => {
 	// get the accounts
 	const accounts = await web3.eth.getAccounts()
 	// grab the first account
@@ -30,3 +33,12 @@ export const loadAccount = async () => {
 	return account
 }
 
+// Get the Token contract
+export const loadToken = async (web3, networkId) => {
+	// get the Token abi in here
+  const abi = Token.abi;
+  const tokenAddress = Token.networks[networkId].address;
+  const token = new web3.eth.Contract(abi, tokenAddress)
+	
+	return token
+}
