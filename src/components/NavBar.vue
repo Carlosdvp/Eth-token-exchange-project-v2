@@ -4,7 +4,7 @@
 <nav>
 
 	<a class="navbar-brand" href="/">
-		<p class="logo-text">Exchange Dapp</p> 
+		<p class="logo-text">Artemis Exchange</p> 
 	</a>
 
   <input type="checkbox" id="nav-toggle">
@@ -13,22 +13,9 @@
   </label>
 
 	<div class="navbar">
-
-		<ul class="navbar-nav">
-			<li class="nav-item-1">
-        <router-link to="/about">Link 1</router-link>
-				<!-- <a to="#" class="nav-link">Link 1</a> -->
-			</li>
-			<li class="nav-item-2">
-        <router-link to="/about">Link 2</router-link>
-				<!-- <a to="#" class="nav-link">Link 2</a> -->
-			</li>
-			<li class="nav-item-3">
-        <router-link to="/about">Link 3</router-link>
-				<!-- <a to="#footer" class="nav-link">Link 3</a> -->
-			</li>
-		</ul>
-
+    <p class="nav-item-account">
+      <a :href="accountEtherscan" target="_blank">{{ getAccount }}</a>
+    </p>
 	</div>
 
 </nav>
@@ -38,18 +25,37 @@
 
 
 <script>
+  // import the store
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 	
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  setup() {
+    const store = useStore()
+    // Computed Properties
+    const account = computed(() => store.state.Web3.account)
+    // get the Etherscan URL
+    const accountEtherscan = computed(() => `https://etherscan.io/address/${account.value}`)
+    // grab the account getter with the new syntax
+    let getAccount = computed(() => store.getters.getAccount)
+
+    return {
+      account,
+      accountEtherscan,
+      getAccount
+    }
+  }
+  // with this computed property we can trigger one of our getters in the store the old way
+  // computed: {
+  //   ...mapGetters(['getAccount'])
+  // }
 }
 
 </script>
 
 
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 
 body {
   margin: 0;
@@ -60,7 +66,7 @@ nav {
 	width: 100%;
   box-shadow: 2px 2px 3px rgba(0,0,0,0.6);
   display: grid;
-  grid-template-columns: 30% 1fr 20% 1fr 20% 1fr 30% 1fr;
+  grid-template-columns: 30% 1fr 20% 1fr 50% 1fr;
   grid-auto-rows: auto;
   align-items: center;
   text-align: center;
@@ -87,19 +93,21 @@ nav {
 	grid-column: 2;
 	margin: 0;
 	padding: 0 .5em;
-	font-size: .7em;
+	font-size: 1.5em;
 	color: ghostwhite;
   text-shadow: 1px 1px lightslategray;
 }
 
 .navbar {
-	grid-column: 7;
+	grid-column: 5;
 }
 
-.navbar-nav {
-	display: grid;
-	grid-template-columns: 30% 30% 30%;
-	grid-template-rows: auto;
+/* Replacing the Nav links with the Account */
+.nav-item-account {
+  grid-row: 1;
+  grid-column: 1;
+  text-align: right;
+  margin-right: 1rem;
 }
 
 #logo-navbrand {
@@ -115,7 +123,6 @@ nav {
 nav a {
 	color: ghostwhite;
 	text-decoration: none;
-	font-size: 2em;
   transition: .4s all ease-in-out;
 }
 
@@ -130,18 +137,6 @@ nav ul li a {
   font-size: 1em;
   padding: 0 1em;
 }
-
-.nav-link {
-	color: lightblue;
-}
-
-.nav-link:hover {
-	color: ghostwhite;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
-  opacity: .9;
-}
-
 
 
 /* Only stick if you can fit */
@@ -168,29 +163,6 @@ nav ul li a {
     padding: 0 .5em;
     font-size: .7em;
     color: firebrick;
-  }
-
-  .navbar-nav {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
-
-  .nav-item-1 {
-    grid-row: 1;
-    grid-column: 1;
-    padding: 1em 0;
-  }
-
-  .nav-item-2 {
-    grid-row: 2;
-    grid-column: 1;
-    padding: 1em 0;
-  }
-
-  .nav-item-3 {
-    grid-row: 3;
-    grid-column: 1;
-    padding: 1em 0 2em;
   }
 
   /* Responsive Nav Menu */
@@ -230,24 +202,6 @@ nav ul li a {
     padding: 0 .5em;
     font-size: .5em;
     color: firebrick;
-  }
-
-  .nav-item-1 {
-    grid-row: 1;
-    grid-column: 1;
-    padding: 1em 0;
-  }
-
-  .nav-item-2 {
-    grid-row: 2;
-    grid-column: 1;
-    padding: 1em 0;
-  }
-
-  .nav-item-3 {
-    grid-row: 3;
-    grid-column: 1;
-    padding: 1em 0 2em;
   }
 }
 
