@@ -23,6 +23,12 @@ export default createStore({
       contract: null
     }
   },
+  // getters act like computed properties for the Vuex store, which can be accessed in our app's components
+  getters: {
+    getAccount: (state) => {
+      return `${state.Web3.account}`
+    }
+  },
   mutations: {
     WEB3_LOADED(state, payload) {
       // console.log('WEB3_LOADED Mutation being executed', payload)

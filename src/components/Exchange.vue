@@ -5,8 +5,8 @@
   <div class="vertical-split">
     <div class="card">
       <div>
-        <h2>Section 1</h2>
-        <p class="description">bacon milkshake pollerita ojo de bife ribeye</p>
+        <h2>Account</h2>
+        <p class="description">{{ getAccount }}</p>
       </div>
     </div>
     <div class="card">
@@ -55,9 +55,14 @@
 </template>
 
 <script>
+// this helps us access the data in the Store
+import { mapGetters } from 'vuex'
 export default {
   name: 'Exchange',
-  props: {}
+  // with this computed property we can trigger one of our getters in the store
+  computed: {
+    ...mapGetters(['getAccount'])
+  }
 }
 
 </script>

@@ -12,13 +12,14 @@ import Exchange from '../components/Exchange.vue'
 import FooterComponent from '../components/FooterComponent.vue'
 import Metamask from '../components/Metamask.vue'
 
-// import the web3 library
-import { loadWeb3, loadAccount, loadToken, loadExchange } from '../../helpers/web3';
-
 // Vuex
 import { useStore } from 'vuex'
 // we also need to use computed properties
 import { computed } from 'vue'
+
+// import the web3 library
+import { loadWeb3, loadAccount, loadToken, loadExchange } from '../../helpers/web3';
+
 
 
 // Module exports and methods
@@ -30,13 +31,10 @@ export default {
     Metamask
   },
   beforeCreate() {
-    console.log('web3Loaded Action dispatched from Home.vue')
+    // console.log('web3Loaded Action dispatched from Home.vue')
     this.$store.dispatch('web3Loaded')
-    console.log('web3AccountLoaded Action dispatched from Home.vue')
     this.$store.dispatch('web3AccountLoaded')
-    console.log('tokenLoaded Action dispatched from Home.vue')
     this.$store.dispatch('tokenLoaded')
-    console.log('exchangeLoaded Action dispatched from Home.vue')
     this.$store.dispatch('exchangeLoaded')
   },
   mounted() {
