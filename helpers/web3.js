@@ -5,7 +5,6 @@ import Token from '../src/abis/Token.json'
 // import Token Contract
 import Exchange from '../src/abis/Exchange.json'
 
-
 // export const loadWeb3 = () => {
 // 	const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
 // 	return web3;
@@ -54,4 +53,16 @@ export const loadExchange = async (web3, networkId) => {
   const exchange = new web3.eth.Contract(abi, exchangeAddress)
 	
 	return exchange
+}
+
+// Grab the Order data from the events emitted by the Exchange contract
+export const loadAllOrders = async (exchange) => {
+	// Fetch cancelled orders with "Cancek" event stream
+	let cancelStream = await exchange.getPastEvents('Cancel', { fromBlock: 0, toBlock: 'latest' })
+	let cancelledOrders = cancelStream.map((event) => event.returnValues)
+
+	// Fetch filled orders with the "Trade" event stream
+
+	// Fetch all orders with the "Order" event stream
+	return cancelledOrders
 }

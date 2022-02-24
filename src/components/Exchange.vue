@@ -1,6 +1,6 @@
 <template>
 
-<div class="container">
+<div class="container" v-if='contractsLoaded'>
 
   <div class="vertical-split">
     <div class="card">
@@ -57,11 +57,47 @@
 <script>
 // this helps us access the data in the Store
 import { mapGetters } from 'vuex'
+// Vuex
+import { useStore } from 'vuex'
+// we also need to use computed properties
+import { computed } from 'vue'
+//import helpers
+import { loadWeb3, loadExchange, loadAllOrders } from '../../helpers/web3'
+
 export default {
   name: 'Exchange',
   // with this computed property we can trigger one of our getters in the store
   computed: {
     ...mapGetters(['getAccount'])
+  },
+  mounted() {
+    this.loadExchangeData()
+  },
+  setup () {
+    const store = useStore()
+    // COMPUTED PROPERTIES
+    let contractsLoaded = computed(() => store.getters.contractsLoaded)
+    let exchange = computed(() => store.getters.exchange)
+    // console.log(exchange)
+
+    // METHODS
+    async function loadExchangeData() {
+      const web3 = await loadWeb3()
+      // grab the network ID
+      const networkId = await web3.eth.net.getId()
+      const exchange = await loadExchange(web3, networkId)
+      // console.log(exchange)
+
+      // load the exchange data
+      const allOrders = await loadAllOrders(exchange)
+      console.log(allOrders)
+    }
+
+    return {
+      contractsLoaded,
+      loadExchangeData,
+      exchange
+    }
   }
 }
 

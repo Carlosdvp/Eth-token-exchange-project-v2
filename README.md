@@ -86,4 +86,19 @@ Some important differences:
 
 The Part 2 project uses React and Bootstrap or the framework and the scaffolding respectively.
 
-I prefer to use Vue.js, so I have replaced React with Vite. And I have also replaced Bootstrap/flexbox with CSS grid and custom css.
+I prefer to use Vue.js, so I have replaced React with Vite. And I have also replaced Bootstrap/flexbox with CSS grid and custom css
+
+### Vuex implementation: Successful
+
+- Was able to completely replace the Redux implementation from the course with Vuex 4
+	-- Got the Actions to be triggeed from the Component, which activated the Mutations and changed the state
+	-- Was also able to implement the use of Getters to access the information from the Vuex store anywhere in the application
+
+
+## How to Run Helper Scripts from within Truffle
+
+- In the root folder of the project I have a scripts folder and a seed-exchange.js file within
+- I couldn't run it as a standalone js file the usual manner (i.e. node <file_name.js>)
+- I need to do it like this inside a Truffle project:
+
+`truffle exec scripts/seed-exchange.js`

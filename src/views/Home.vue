@@ -17,9 +17,8 @@ import { useStore } from 'vuex'
 // we also need to use computed properties
 import { computed } from 'vue'
 
-// import the web3 library
+// import the web3 Helpers library
 import { loadWeb3, loadAccount, loadToken, loadExchange } from '../../helpers/web3';
-
 
 
 // Module exports and methods
@@ -36,6 +35,7 @@ export default {
     this.$store.dispatch('web3AccountLoaded')
     this.$store.dispatch('tokenLoaded')
     this.$store.dispatch('exchangeLoaded')
+    this.$store.dispatch('cancelledOrdersLoaded')
   },
   mounted() {
     this.loadBlockchainData()
@@ -46,20 +46,16 @@ export default {
       const web3 = await loadWeb3()
       // grab the network ID
       const networkId = await web3.eth.net.getId()
-      // Check the network we are connected to -- this method appears to be deprecated (getNetworkType), docs recommend we use the one included below
+      // Check the network we are connected to
       const network = await web3.eth.getChainId()
       // get the accounts
       const accounts = await loadAccount(web3)
-      console.log(accounts)
-      // get the Token abi in here
-      // const abi = Token.abi;
-      // const tokenAddress = Token.networks[networkId].address;
+      // alert the user if either of these contracts are not loaded
       const token = await loadToken(web3, networkId)
       const exchange = await loadExchange(web3, networkId)
-
+      // console.log(exchange)
       // get the total supply by calling one of our contract methods
       // const totalSupply = await token.methods.totalSupply().call()
-      // console.log("Total Supply: ", totalSupply)
     }
   }
 }
