@@ -27,7 +27,15 @@ export default createStore({
       cancelledOrders: {
         loaded: false,
         data: null
-      }
+      },
+      filledOrders: {
+        loaded: false,
+        data: null
+      },
+      allOrders: {
+        loaded: false,
+        data: null
+      },
     }
   },
   // getters act like computed properties for the Vuex store, which can be accessed in our app's components
@@ -82,11 +90,28 @@ export default createStore({
       // this variable needs to return the same thing as the loadAllOrders(exchange) function
       let result = cancelledOrders
       loaded = true
-      console.log('inside the CANCELLED_ORDERS_LOADED mutation', result)
+      console.log('inside the CANCELLED_ORDERS_LOADED mutation', result.cancelledOrders)
 
       state.Exchange.cancelledOrders.loaded = loaded
-      state.Exchange.cancelledOrders.data = result
+      state.Exchange.cancelledOrders.data = result.cancelledOrders
+    },
+    FILLED_ORDERS_LOADED(state, filledOrders, loaded) {
+      // this variable needs to return the same thing as the loadAllOrders(exchange) function
+      let result = filledOrders
+      loaded = true
+      console.log('inside the FILLED_ORDERS_LOADED mutation', result.filledOrders)
 
+      state.Exchange.filledOrders.loaded = loaded
+      state.Exchange.filledOrders.data = result.filledOrders
+    },
+    ALL_ORDERS_LOADED(state, allOrders, loaded) {
+      // this variable needs to return the same thing as the loadAllOrders(exchange) function
+      let result = allOrders
+      loaded = true
+      console.log('inside the ALL_ORDERS_LOADED mutation', result.allOrders)
+
+      state.Exchange.allOrders.loaded = loaded
+      state.Exchange.allOrders.data = result.allOrders
     }
   },
   actions: {
@@ -114,7 +139,6 @@ export default createStore({
       let contract = await loadToken(web3, networkId)
       console.log('commit result to the TOKEN_LOADED Mutation')
       commit('TOKEN_LOADED', contract)
-
     },
     // EXCHANGE ACTIONS
     async exchangeLoaded({ commit }) {
@@ -133,10 +157,31 @@ export default createStore({
 
       let exchange = await loadExchange(web3, networkId)
       let cancelledOrders = await loadAllOrders(exchange)
-      // console.log(cancelledOrders[0])
 
       console.log('commit result to the CANCELLED_ORDERS_LOADED Mutation')
       commit('CANCELLED_ORDERS_LOADED', cancelledOrders)
+    },
+    async filledOrdersLoaded({ commit }) {
+      console.log('filledOrdersLoaded Action being executed')
+      const web3 = await loadWeb3()
+      const networkId = await web3.eth.net.getId()
+
+      let exchange = await loadExchange(web3, networkId)
+      let filledOrders = await loadAllOrders(exchange)
+
+      console.log('commit result to the FILLED_ORDERS_LOADED Mutation')
+      commit('FILLED_ORDERS_LOADED', filledOrders)
+    },
+    async allOrdersLoaded({ commit }) {
+      console.log('allOrdersLoaded Action being executed')
+      const web3 = await loadWeb3()
+      const networkId = await web3.eth.net.getId()
+
+      let exchange = await loadExchange(web3, networkId)
+      let allOrders = await loadAllOrders(exchange)
+
+      console.log('commit result to the ALL_ORDERS_LOADED Mutation')
+      commit('ALL_ORDERS_LOADED', allOrders)
     }
   },
   modules: { }

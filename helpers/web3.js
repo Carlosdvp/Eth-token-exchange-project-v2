@@ -4,6 +4,7 @@ import Web3 from 'web3';
 import Token from '../src/abis/Token.json'
 // import Token Contract
 import Exchange from '../src/abis/Exchange.json'
+// import the necessary 
 
 // export const loadWeb3 = () => {
 // 	const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
@@ -62,7 +63,16 @@ export const loadAllOrders = async (exchange) => {
 	let cancelledOrders = cancelStream.map((event) => event.returnValues)
 
 	// Fetch filled orders with the "Trade" event stream
+	let tradeStream = await exchange.getPastEvents('Trade', { fromBlock: 0, toBlock: 'latest' })
+	let filledOrders = tradeStream.map((event) => event.returnValues)
 
 	// Fetch all orders with the "Order" event stream
-	return cancelledOrders
+	let orderStream = await exchange.getPastEvents('Order', { fromBlock: 0, toBlock: 'latest' })
+	let allOrders = orderStream.map((event) => event.returnValues)
+
+	return { 
+		cancelledOrders, 
+		filledOrders, 
+		allOrders 
+	}
 }

@@ -36,6 +36,8 @@ export default {
     this.$store.dispatch('tokenLoaded')
     this.$store.dispatch('exchangeLoaded')
     this.$store.dispatch('cancelledOrdersLoaded')
+    this.$store.dispatch('filledOrdersLoaded')
+    this.$store.dispatch('allOrdersLoaded')
   },
   mounted() {
     this.loadBlockchainData()
