@@ -15,8 +15,9 @@ npm run serve
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Compile SmartContracts
+
+
 
 
 **********************************************************************
@@ -68,7 +69,7 @@ Some important differences:
 
 - when using ganache
 	- if you restart Ganache to rest the ETH balances make sure to redeploy the smart contracts:
-		1. run this command: `truffle migrate --rest`
+		1. run this command: `truffle migrate --reset`
 		2. and then seed the exchange: `truffle exec scripts/seed-exchange.js`
 
 
@@ -86,13 +87,15 @@ Some important differences:
 
 The Part 2 project uses React and Bootstrap or the framework and the scaffolding respectively.
 
-I prefer to use Vue.js, so I have replaced React with Vite. And I have also replaced Bootstrap/flexbox with CSS grid and custom css
+I prefer to use Vue.js, so I have replaced React with Vite. And I have also replaced Bootstrap/flexbox with CSS grid and custom css.
+	- later I can look into something like Vuetify or Tailwind to simplify the CSS implementation
 
 ### Vuex implementation: Successful
 
 - Was able to completely replace the Redux implementation from the course with Vuex 4
 	-- Got the Actions to be triggeed from the Component, which activated the Mutations and changed the state
 	-- Was also able to implement the use of Getters to access the information from the Vuex store anywhere in the application
+	-- Looks like Pinia is the next evolution of Vuex, should check it out later
 
 
 ## How to Run Helper Scripts from within Truffle
@@ -102,3 +105,33 @@ I prefer to use Vue.js, so I have replaced React with Vite. And I have also repl
 - I need to do it like this inside a Truffle project:
 
 `truffle exec scripts/seed-exchange.js`
+
+---------------------------------------------------------------------
+
+
+### Issues Encountered
+
+- when running the app I get a ton (7) console errors, Token / Exchange contracts are not being loaded correctly.
+
+- errors with web3, networkId and others as undefined:
+	- apparently it was because Metamask was not connected, once I logged into a test account the contracts got picked up.
+
+#### Error: Network not synced; last block was 6624.5 seconds ago
+- if this one passes then the next error comes up:
+
+#### Error: ENS is not supoorted on network private (using ganache)
+
+- could this be the answer:
+https://trufflesuite.com/docs/truffle/advanced/ethereum-name-service/
+
+	- from their docs: https://docs.ens.domains/deploying-ens-on-a-private-chain
+	- import contracts: npm install @ensdomains/ens-contracts
+
+	- added import statements to the Token and Exchange contracts
+	- deployed contracts again
+	- now I have the following error message:
+
+
+	- looks like this issue is known and might not have a fix as long as one is on a dev (ganache) network, do to how the ganache automining works.
+
+- Truffle is supposed to have ENS integration and one should be able to use it inside the truffle project, that, however, is not the case.

@@ -20,6 +20,10 @@ import { computed } from 'vue'
 // import the web3 Helpers library
 import { loadWeb3, loadAccount, loadToken, loadExchange } from '../../helpers/web3';
 
+import {
+  ENS, ENSRegistry, PublicResolver
+} from '@ensdomains/ens-contracts'
+
 
 // Module exports and methods
 export default {
@@ -39,8 +43,11 @@ export default {
     this.$store.dispatch('filledOrdersLoaded')
     this.$store.dispatch('allOrdersLoaded')
   },
-  mounted() {
+  created() {
     this.loadBlockchainData()
+
+  },
+  mounted() {
   },
   methods: {
     async loadBlockchainData() {

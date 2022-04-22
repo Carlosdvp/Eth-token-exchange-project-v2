@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import Web3 from 'web3'
 
+
 // import our Web3 helper methods
 import { 
   loadWeb3,
@@ -58,6 +59,11 @@ export default createStore({
     },
     exchange: (state) => {
       return `${state.Exchange.contract}`
+    },
+    // Getters for the Orders
+    getFilledOrders: (state) => {
+
+      return `${state.Exchange.filledOrders.data}`
     }
   },
   mutations: {
@@ -90,7 +96,7 @@ export default createStore({
       // this variable needs to return the same thing as the loadAllOrders(exchange) function
       let result = cancelledOrders
       loaded = true
-      console.log('inside the CANCELLED_ORDERS_LOADED mutation', result.cancelledOrders)
+      // console.log('inside the CANCELLED_ORDERS_LOADED mutation', result.cancelledOrders)
 
       state.Exchange.cancelledOrders.loaded = loaded
       state.Exchange.cancelledOrders.data = result.cancelledOrders
@@ -99,7 +105,7 @@ export default createStore({
       // this variable needs to return the same thing as the loadAllOrders(exchange) function
       let result = filledOrders
       loaded = true
-      console.log('inside the FILLED_ORDERS_LOADED mutation', result.filledOrders)
+      // console.log('inside the FILLED_ORDERS_LOADED mutation', result.filledOrders)
 
       state.Exchange.filledOrders.loaded = loaded
       state.Exchange.filledOrders.data = result.filledOrders
@@ -108,7 +114,7 @@ export default createStore({
       // this variable needs to return the same thing as the loadAllOrders(exchange) function
       let result = allOrders
       loaded = true
-      console.log('inside the ALL_ORDERS_LOADED mutation', result.allOrders)
+      // console.log('inside the ALL_ORDERS_LOADED mutation', result.allOrders)
 
       state.Exchange.allOrders.loaded = loaded
       state.Exchange.allOrders.data = result.allOrders
@@ -137,7 +143,7 @@ export default createStore({
       const networkId = await web3.eth.net.getId()
 
       let contract = await loadToken(web3, networkId)
-      console.log('commit result to the TOKEN_LOADED Mutation')
+      // console.log('commit result to the TOKEN_LOADED Mutation')
       commit('TOKEN_LOADED', contract)
     },
     // EXCHANGE ACTIONS
@@ -147,40 +153,40 @@ export default createStore({
       const networkId = await web3.eth.net.getId()
 
       let contract = await loadExchange(web3, networkId)
-      console.log('commit result to the EXCHANGE_LOADED Mutation')
+      // console.log('commit result to the EXCHANGE_LOADED Mutation')
       commit('EXCHANGE_LOADED', contract)
     },
     async cancelledOrdersLoaded({ commit}) {
-      console.log('cancelledOrdersLoaded Action being executed')
+      // console.log('cancelledOrdersLoaded Action being executed')
       const web3 = await loadWeb3()
       const networkId = await web3.eth.net.getId()
 
       let exchange = await loadExchange(web3, networkId)
       let cancelledOrders = await loadAllOrders(exchange)
 
-      console.log('commit result to the CANCELLED_ORDERS_LOADED Mutation')
+      // console.log('commit result to the CANCELLED_ORDERS_LOADED Mutation')
       commit('CANCELLED_ORDERS_LOADED', cancelledOrders)
     },
     async filledOrdersLoaded({ commit }) {
-      console.log('filledOrdersLoaded Action being executed')
+      // console.log('filledOrdersLoaded Action being executed')
       const web3 = await loadWeb3()
       const networkId = await web3.eth.net.getId()
 
       let exchange = await loadExchange(web3, networkId)
       let filledOrders = await loadAllOrders(exchange)
 
-      console.log('commit result to the FILLED_ORDERS_LOADED Mutation')
+      // console.log('commit result to the FILLED_ORDERS_LOADED Mutation')
       commit('FILLED_ORDERS_LOADED', filledOrders)
     },
     async allOrdersLoaded({ commit }) {
-      console.log('allOrdersLoaded Action being executed')
+      // console.log('allOrdersLoaded Action being executed')
       const web3 = await loadWeb3()
       const networkId = await web3.eth.net.getId()
 
       let exchange = await loadExchange(web3, networkId)
       let allOrders = await loadAllOrders(exchange)
 
-      console.log('commit result to the ALL_ORDERS_LOADED Mutation')
+      // console.log('commit result to the ALL_ORDERS_LOADED Mutation')
       commit('ALL_ORDERS_LOADED', allOrders)
     }
   },

@@ -43,10 +43,7 @@
 
   <div class="vertical">
     <div class="card">
-      <div>
-        <h2>Section6</h2>
-        <p class="description">bacon milkshake pollerita ojo de bife ribeye</p>
-      </div>
+      <Trades />
     </div>
   </div>
 
@@ -56,16 +53,23 @@
 
 <script>
 // this helps us access the data in the Store
-import { mapGetters } from 'vuex'
-// Vuex
-import { useStore } from 'vuex'
+import { mapGetters, useStore } from 'vuex'
 // we also need to use computed properties
 import { computed } from 'vue'
 //import helpers
 import { loadWeb3, loadExchange, loadAllOrders } from '../../helpers/web3'
+// import mini-components
+import Trades from './Trades.vue'
+// ENS
+import {
+  ENS, ENSRegistry, PublicResolver
+} from '@ensdomains/ens-contracts'
 
 export default {
   name: 'Exchange',
+    components: {
+    Trades
+  },
   // with this computed property we can trigger one of our getters in the store
   computed: {
     ...mapGetters(['getAccount'])
@@ -77,8 +81,6 @@ export default {
     const store = useStore()
     // COMPUTED PROPERTIES
     let contractsLoaded = computed(() => store.getters.contractsLoaded)
-    let exchange = computed(() => store.getters.exchange)
-    // console.log(exchange)
 
     // METHODS
     async function loadExchangeData() {
@@ -95,8 +97,7 @@ export default {
 
     return {
       contractsLoaded,
-      loadExchangeData,
-      exchange
+      loadExchangeData
     }
   }
 }
@@ -117,7 +118,6 @@ export default {
   background-repeat: round;
   background-size: cover;
   color: ghostwhite; 
-  /* height: 100%; */
   height: 87vh;
 }
 
@@ -131,23 +131,11 @@ export default {
   margin: 3px;
 }
 
-/* .vertical-split > div:first-child {
-  margin-bottom: 2px;
-} */
-
-/* .vertical-split:last-child > div:first-child {
-  height: 60%;
-} */
-
-/* .vertical-split:last-child > div:last-child {
-  height: 40%;
-} */
-
 .card {
   display: grid;
   width: 95%;
   grid-template-columns: 100%;
-  align-items: center;
+  /* align-items: center; */
   border: 1px solid ghostwhite;
   border-radius: 1px;
   margin: 0;
